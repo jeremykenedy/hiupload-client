@@ -1,0 +1,39 @@
+@import '~filepond/dist/filepond.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    @apply border-t-4 border-indigo-500;
+}
+
+a {
+    cursor: pointer;
+}
+
+.router-link-active,
+.router-link-exact-active {
+  @apply text-indigo-800;
+}
+
+.filepond--drop-label,
+.filepond--panel-root {
+    @apply bg-gray-200 rounded-lg;
+}
+
+.filepond--item-panel {
+    @apply bg-indigo-500;
+}
+
+.filepond--credits {
+    display: none;
+}
+
+.swal2-popup.swal2-modal {
+    @apply rounded-lg !important;
+}
+
+.swal2-confirm {
+    @apply rounded-md !important;
+}
