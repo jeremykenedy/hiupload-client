@@ -7,19 +7,33 @@
           :key="plan.slug"
           class="flex items-center mb-3"
         >
-          <input v-model="form.plan" :value="plan.slug" type="radio" name="plan" :id="`plan_${plan.slug}`" class="mr-3 cursor-pointer">
-          <label :for="`plan_${plan.slug}`" class="flex-grow cursor-pointer">
+          <input
+            v-if="canSelectPlan(plan)"
+            v-model="form.plan"
+            :value="plan.slug"
+            :id="`plan_${plan.slug}`"
+            type="radio"
+            name="plan"
+            class="mr-3 cursor-pointer"
+          >
+          <label
+            :for="`plan_${plan.slug}`"
+            class="flex-grow cursor-pointer"
+          >
             <AppPlan
               :plan="plan"
+              :enabled="canSelectPlan(plan)"
+              :current-plan="currentPlan(plan)"
             />
           </label>
         </div>
       </div>
       <button
+        v-if="availablePlans.length > 0"
         type="submit"
         class="text-white px-4 py-3 leading-none rounded-md font-medium"
-        :class="submitting ? 'bg-indigo-300' : 'bg-indigo-500 '"
-        :disabled="submitting"
+        :class="submitting || !selectedPlan ? 'bg-indigo-300' : 'bg-indigo-500 '"
+        :disabled="submitting || !selectedPlan"
       >
         <span v-if="!submitting">
           Swap
@@ -30,25 +44,41 @@
           <i class="fas fa-circle-notch fa-spin fa-fw" />
         </span>
       </button>
+      <p
+        v-if="availablePlans.length <= 0"
+        class="bg-gray-100 rounded-lg p-3 text-gray-800 text-sm"
+      >
+        There are no availabled plans for you to swap to right now. becuase you're using too much storage.
+      </p>
     </form>
   </div>
 </template>
 
-<!-- HERE -->
-<!-- https://codecourse.com/watch/build-a-file-sharing-saas-app?part=filtering-available-plans-to-swap-to -->
-
 <script>
 import axios from 'axios';
 import AppPlan from '@/components/AppPlan';
+import { mapActions, mapGetters } from 'vuex';
+import filesize from 'filesize';
 
 export default {
   name: 'swap',
   components: { AppPlan },
   props: {},
-  computed: {},
+  computed: {
+    ...mapGetters({
+      user: 'auth/user',
+    }),
+    availablePlans () {
+      return this.plans.filter(p => p.slug !== this.user.plan.slug && this.planAvailability[p.slug]);
+    },
+    selectedPlan () {
+      return this.plans.find(p => p.slug === this.form.plan);
+    }
+  },
   data () {
     return {
-      plans: null,
+      plans: [],
+      planAvailability: [],
       submitting: false,
       form: {
         plan: null,
@@ -59,12 +89,71 @@ export default {
     this.setupPlans();
   },
   methods: {
+    ...mapActions({
+      me: 'auth/me',
+      popToast: 'toast/popToast',
+    }),
+    canSelectPlan (plan) {
+      if (this.availablePlans.find(p => p.slug === plan.slug)) {
+        return true;
+      }
+      return false;
+    },
+    currentPlan (plan) {
+      if (this.user.plan.slug == plan.slug) {
+        return true;
+      }
+      return false;
+    },
     async setupPlans () {
       let response = await axios.get('api/plans');
       this.plans = response.data.data;
+
+      let planAvailability = await axios.get('api/user/plan/availability');
+      this.planAvailability = planAvailability.data.data;
     },
     async submit () {
-
+      const self = this;
+      let oldPlan = self.user.plan;
+      let newPlan = self.selectedPlan;
+      self.submitting = true;
+      await self.$swal({
+          title: 'Confirm Plan Change',
+          html: `Are you sure you want to change to the plan the following plan?
+            <br>
+            <br>
+            <strong>${newPlan.name}</strong>
+            <br>
+            $${ parseInt(newPlan.price, 10) / 100 } / month / ${filesize(newPlan.storage)}
+            <br>
+            <br>
+          `,
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Confirm',
+          confirmButtonColor: '#FF0000',
+          showClass: {
+            popup: '',
+          },
+          hideClass: {
+            popup: '',
+          },
+      }).then((result) => {
+        if (result.value) {
+          axios.patch('api/subscriptions', self.form).then(() => {
+            self.me().then(() => {
+              self.submitting = false;
+              self.form.plan = null;
+              self.popToast({
+                message: `Plan successfully swapped from ${oldPlan.name} to ${newPlan.name}`,
+                timer: 7000,
+              });
+              self.$router.replace({ name: 'account' });
+            })
+          });
+        }
+      });
+      self.submitting = false;
     },
   }
 }

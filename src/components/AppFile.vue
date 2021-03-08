@@ -25,6 +25,7 @@ export default {
   methods: {
     ...mapActions({
       deleteFileAction: 'files/deleteFile',
+      popToast: 'toast/popToast',
     }),
     ...mapMutations({
       addFile: 'files/ADD_FILE',
@@ -32,7 +33,7 @@ export default {
     }),
     async deleteFile (name) {
       const self = this;
-      await this.$swal({
+      await self.$swal({
           title: 'Confirm File Delete',
           html: `Really Delete the file: <strong>${name}</strong>?`,
           type: "warning",
@@ -48,24 +49,9 @@ export default {
           },
       }).then((result) => {
         if (result.value) {
-          this.deleteFileAction(this.file.uuid).then(() => {
-            this.decrementUsage(this.file.size);
-            this.$swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'success',
-              showConfirmButton: false,
-              title: 'File Deleted Successfully',
-              timer: 3000,
-              timerProgressBar: true,
-              showClass: {
-                popup: '',
-                // icon: ''
-              },
-              hideClass: {
-                popup: '',
-              },
-            })
+          self.deleteFileAction(self.file.uuid).then(() => {
+            self.decrementUsage(self.file.size);
+            self.popToast({ message: 'File Deleted Successfully' });
           });
         }
       });
