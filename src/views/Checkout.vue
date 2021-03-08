@@ -26,21 +26,12 @@
       </label>
       <div id="card" ref="card"></div>
     </div>
-    <button
+    <AppButton
+      :loading="submitting"
+      :text="submitting ? 'Paying' : 'Pay'"
+      :icon="submitting ? 'fas fa-circle-notch fa-spin' : 'fas fa-check'"
       type="submit"
-      class="text-white px-4 py-3 leading-none rounded-md font-medium"
-      :class="submitting ? 'bg-indigo-300' : 'bg-indigo-500 '"
-      :disabled="submitting"
-    >
-      <span v-if="!submitting">
-        Pay
-        <i class="fas fa-check fa-fw"></i>
-      </span>
-      <span v-if="submitting">
-        Paying
-        <i class="fas fa-circle-notch fa-spin fa-fw" />
-      </span>
-    </button>
+    />
   </form>
 </template>
 
@@ -48,6 +39,7 @@
 import axios from 'axios';
 import { mapActions } from 'vuex';
 import ErrorMessage from '@/components/ErrorMessage';
+import AppButton from '@/components/AppButton';
 
 const stripe = Stripe(process.env.VUE_APP_STRIPE_KEY);
 const elements = stripe.elements();
@@ -55,7 +47,7 @@ const cardElement = elements.create('card');
 
 export default {
   name: 'checkout',
-  components: { ErrorMessage },
+  components: { AppButton, ErrorMessage },
   props: {
     plan: { type: String, required: true },
   },
@@ -78,6 +70,7 @@ export default {
   methods: {
     ...mapActions({
       me: 'auth/me',
+      popToast: 'toast/popToast',
     }),
     async setupStripe () {
       let response = await axios.get('api/subscriptions/intent');
@@ -103,25 +96,31 @@ export default {
       }
     },
     async createSubscription (token) {
-      let response = await axios.post('api/subscriptions', { plan: this.plan, token });
-      await this.me();
-      this.submitting = false;
-      await this.$swal({
-          title: 'Success',
-          html: `Successfully Updated!`,
-          type: "success",
-          icon: 'success',
-          showCancelButton: false,
-          confirmButtonText: 'Great!',
-          showClass: {
-            popup: '',
-          },
-          hideClass: {
-            popup: '',
-          },
-      }).then((result) => {
-        this.$router.replace({ name: 'home' });
+      const self = this;
+      let response = await axios.post('api/subscriptions', { plan: self.plan, token });
+      await self.me();
+      self.submitting = false;
+      // await self.$swal({
+      //     title: 'Success',
+      //     html: `Successfully Updated!`,
+      //     type: "success",
+      //     icon: 'success',
+      //     showCancelButton: false,
+      //     confirmButtonText: 'Great!',
+      //     showClass: {
+      //       popup: '',
+      //     },
+      //     hideClass: {
+      //       popup: '',
+      //     },
+      // }).then((result) => {
+      //   self.$router.replace({ name: 'home' });
+      // });
+      self.popToast({
+        message: `Plan successfully upgraded`,
+        timer: 5000,
       });
+      self.$router.replace({ name: 'home' });
     },
     clearErrors () {
       this.error = null;

@@ -28,22 +28,14 @@
           </label>
         </div>
       </div>
-      <button
+      <AppButton
         v-if="availablePlans.length > 0"
+        :loading="submitting || !selectedPlan"
+        :text="submitting ? 'Swapping' : 'Swap'"
+        :icon="submitting ? 'fas fa-circle-notch fa-spin' : 'fas fa-check'"
+        :disabled="!selectedPlan"
         type="submit"
-        class="text-white px-4 py-3 leading-none rounded-md font-medium"
-        :class="submitting || !selectedPlan ? 'bg-indigo-300' : 'bg-indigo-500 '"
-        :disabled="submitting || !selectedPlan"
-      >
-        <span v-if="!submitting">
-          Swap
-          <i class="fas fa-check fa-fw"></i>
-        </span>
-        <span v-if="submitting">
-          Swapping
-          <i class="fas fa-circle-notch fa-spin fa-fw" />
-        </span>
-      </button>
+      />
       <p
         v-if="availablePlans.length <= 0"
         class="bg-gray-100 rounded-lg p-3 text-gray-800 text-sm"
@@ -57,12 +49,13 @@
 <script>
 import axios from 'axios';
 import AppPlan from '@/components/AppPlan';
+import AppButton from '@/components/AppButton';
 import { mapActions, mapGetters } from 'vuex';
 import filesize from 'filesize';
 
 export default {
   name: 'swap',
-  components: { AppPlan },
+  components: { AppButton, AppPlan },
   props: {},
   computed: {
     ...mapGetters({
@@ -116,7 +109,6 @@ export default {
       const self = this;
       let oldPlan = self.user.plan;
       let newPlan = self.selectedPlan;
-      self.submitting = true;
       await self.$swal({
           title: 'Confirm Plan Change',
           html: `Are you sure you want to change to the plan the following plan?
@@ -140,20 +132,20 @@ export default {
           },
       }).then((result) => {
         if (result.value) {
+          self.submitting = true;
           axios.patch('api/subscriptions', self.form).then(() => {
             self.me().then(() => {
               self.submitting = false;
               self.form.plan = null;
               self.popToast({
                 message: `Plan successfully swapped from ${oldPlan.name} to ${newPlan.name}`,
-                timer: 7000,
+                timer: 5000,
               });
               self.$router.replace({ name: 'account' });
             })
           });
         }
       });
-      self.submitting = false;
     },
   }
 }

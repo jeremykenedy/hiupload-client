@@ -8,6 +8,7 @@ export default {
       showConfirmButton: false,
       timer: 3000,
       timerProgressBar: true,
+      showCloseButton: false,
     },
   },
   getters: {
@@ -35,6 +36,9 @@ export default {
       if (data.hasOwnProperty('timerProgressBar')) {
         state.toast.timerProgressBar = data.timerProgressBar;
       }
+      if (data.hasOwnProperty('showCloseButton')) {
+        state.toast.showCloseButton = data.showCloseButton;
+      }
     },
   },
   actions: {
@@ -49,6 +53,7 @@ export default {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true,
+        showCloseButton: false,
       });
     },
   },

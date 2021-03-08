@@ -1,3 +1,6 @@
+<template>
+</template>
+
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
@@ -31,6 +34,7 @@ export default {
         title: this.toast.message,
         timer: this.toast.timer,
         timerProgressBar: this.toast.timerProgressBar,
+        showCloseButton: this.toast.showCloseButton,
         showClass: {
           popup: '',
           // icon: ''
