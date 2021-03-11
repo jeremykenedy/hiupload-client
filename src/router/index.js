@@ -6,6 +6,7 @@ import Plans from '../views/Plans.vue'
 import Checkout from '../views/Checkout.vue'
 import Account from '../views/Account.vue'
 import Swap from '../views/Swap.vue'
+import Download from '../views/Download.vue'
 
 const routes = [
   {
@@ -44,11 +45,17 @@ const routes = [
     name: 'swap',
     component: Swap
   },
-]
+  {
+    path: '/download/:uuid',
+    name: 'download',
+    component: Download,
+    props: route => ({ uuid: route.params.uuid, token: route.query.token })
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
 export default router

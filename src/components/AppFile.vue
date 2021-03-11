@@ -4,9 +4,9 @@
       {{ file.name }}
     </div>
     <div class="-mr-3 flex items-center">
-      <a href="" class="inline-block text-sm p-3 text-indigo-500 font-medium">
-        Get Sharable Link
-      </a>
+      <AppFileLink
+        :file="file"
+      />
       <a class="inline-block text-sm p-3 text-pink-500 font-medium" @click.prevent="deleteFile(file.name)">
         Delete
       </a>
@@ -16,11 +16,15 @@
 
 <script>
 import { mapActions, mapMutations } from 'vuex';
+import AppFileLink from '@/components/AppFileLink';
 
 export default {
   name: 'appfile',
+  components: {
+    AppFileLink
+  },
   props: {
-    file: { type: Object, required: true }
+    file: { type: Object, required: true },
   },
   methods: {
     ...mapActions({

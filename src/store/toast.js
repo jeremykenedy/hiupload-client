@@ -43,6 +43,15 @@ export default {
   },
   actions: {
     popToast ({ commit }, toast) {
+      commit('SET_TOAST', {
+        icon: 'success',
+        message: null,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        showCloseButton: false,
+      });
       commit('SET_TOAST', toast);
     },
     clearToast ({ commit }) {

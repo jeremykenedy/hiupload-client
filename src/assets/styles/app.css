@@ -1,15 +1,19 @@
 @import '~filepond/dist/filepond.min.css';
+@import '~sweetalert2/dist/sweetalert2.min.css';
+@import '~tippy.js/dist/tippy.css';
+@import '~tippy.js/themes/material.css';
+@import '~tippy.js/animations/perspective.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-    @apply border-t-4 border-indigo-500;
+  @apply border-t-4 border-indigo-500;
 }
 
 a {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .router-link-active,
@@ -19,21 +23,21 @@ a {
 
 .filepond--drop-label,
 .filepond--panel-root {
-    @apply bg-gray-200 rounded-lg;
+  @apply bg-gray-200 rounded-lg;
 }
 
 .filepond--item-panel {
-    @apply bg-indigo-500;
+  @apply bg-indigo-500;
 }
 
 .filepond--credits {
-    display: none;
+  display: none;
 }
 
 .swal2-popup.swal2-modal {
-    @apply rounded-lg !important;
+  @apply rounded-lg;
 }
 
 .swal2-confirm {
-    @apply rounded-md !important;
+  @apply rounded-md;
 }

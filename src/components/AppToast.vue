@@ -35,6 +35,13 @@ export default {
         timer: this.toast.timer,
         timerProgressBar: this.toast.timerProgressBar,
         showCloseButton: this.toast.showCloseButton,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', this.$swal.stopTimer)
+          toast.addEventListener('mouseleave', this.$swal.resumeTimer)
+          toast.addEventListener('click', () => {
+            this.$swal.close();
+          })
+        },
         showClass: {
           popup: '',
           // icon: ''

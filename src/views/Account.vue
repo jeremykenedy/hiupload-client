@@ -5,37 +5,36 @@
     </h2>
     <div class="text-sm">
       <p class="mb-2">
-        You're on the {{ user.plan.name }} plan.
-        <template v-if="user.ends_at">Your current subscription ends on {{ user.ends_at }} </template>
+        You're on the <strong>{{ user.plan.name }} plan</strong>.
+        <div v-if="user.ends_at">
+          Your current paid subscription ends on <strong>{{ dateTimeTimeFormatted(user.ends_at) }}</strong>
+        </div>
       </p>
       <router-link :to="{ name: 'swap' }" class="text-indigo-500">
         Swap Plan
       </router-link>
     </div>
-
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
+import moment from 'moment'
 
 export default {
-  name: '',
-  components: {},
-  props: {},
+  name: 'account',
   computed: {
     ...mapGetters({
       authenticated: 'auth/authenticated',
       user: 'auth/user',
     }),
   },
-  data () {
-    return {
-      //
+  methods: {
+    dateTimeTimeFormatted(value) {
+      if (value) {
+        return moment(value).format('MMMM Do YYYY, h:mm:ss a');
+      }
     }
   },
-  created () {},
-  mounted () {},
-  methods: {}
 }
 </script>
