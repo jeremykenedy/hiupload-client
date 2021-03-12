@@ -30,7 +30,7 @@
       class="font-medium"
       :class="enabled ? 'text-black-800' : 'text-gray-400'"
     >
-      ${{ parseInt(plan.price, 10) / 100 }} / month
+      {{ planPrice }}
     </span>
   </div>
 </template>
@@ -50,14 +50,9 @@ export default {
     storageFormatted () {
       return filesize(this.plan.storage);
     },
+    planPrice() {
+      return `$${parseInt(this.plan.price, 10) / 100} / month`;
+    },
   },
-  data () {
-    return {
-      //
-    }
-  },
-  created () {},
-  mounted () {},
-  methods: {}
 }
 </script>

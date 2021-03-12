@@ -31,7 +31,7 @@
       <AppButton
         v-if="availablePlans.length > 0"
         :loading="submitting || !selectedPlan"
-        :text="submitting ? 'Swapping' : 'Swap'"
+        :text="submitting ? 'Changing' : 'Change'"
         :icon="submitting ? 'fas fa-circle-notch fa-spin' : 'fas fa-check'"
         :disabled="!selectedPlan"
         type="submit"
@@ -49,13 +49,12 @@
 <script>
 import axios from 'axios';
 import AppPlan from '@/components/AppPlan';
-import AppButton from '@/components/AppButton';
 import { mapActions, mapGetters } from 'vuex';
 import filesize from 'filesize';
 
 export default {
   name: 'swap',
-  components: { AppButton, AppPlan },
+  components: { AppPlan },
   props: {},
   computed: {
     ...mapGetters({

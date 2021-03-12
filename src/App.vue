@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full md:w-8/12 lg:w-6/12 mx-auto px-6 mt-6 md:mt-20">
+  <div class="w-full md:w-10/12 lg:w-8/12 mx-auto px-6 mt-6 md:mt-20">
     <AppNav />
     <router-view/>
     <AppToast />
@@ -9,10 +9,11 @@
 <script>
 import AppNav from '@/components/AppNav';
 import AppToast from '@/components/AppToast';
+
 export default {
   components: {
     AppNav,
-    AppToast
+    AppToast,
   }
 }
 </script>

@@ -10,7 +10,9 @@
       </li>
     </ul>
 
-    <div class="flex justify-center order-last w-full xl:w-auto xl:order-none">
+    <div
+      class="flex justify-center order-last w-full md:w-auto md:order-none"
+    >
       <AppUsage v-if="authenticated" />
     </div>
 
@@ -24,7 +26,11 @@
           </router-link>
         </li>
         <li>
-          <a class="text-small inline-block p-3 text-gray-800">Create Account</a>
+          <router-link
+            :to="{ name: 'register' }" class="text-small inline-block p-3 text-gray-800"
+          >
+            Create Account
+          </router-link>
         </li>
       </template>
       <template v-if="authenticated">
@@ -70,6 +76,9 @@ export default {
       authenticated: 'auth/authenticated',
       user: 'auth/user',
     }),
+    currentRouteName() {
+      return this.$route.name;
+    }
   },
   methods: {
     ...mapActions({

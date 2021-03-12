@@ -39,7 +39,6 @@
 import axios from 'axios';
 import { mapActions } from 'vuex';
 import ErrorMessage from '@/components/ErrorMessage';
-import AppButton from '@/components/AppButton';
 
 const stripe = Stripe(process.env.VUE_APP_STRIPE_KEY);
 const elements = stripe.elements();
@@ -47,7 +46,7 @@ const cardElement = elements.create('card');
 
 export default {
   name: 'checkout',
-  components: { AppButton, ErrorMessage },
+  components: { ErrorMessage },
   props: {
     plan: { type: String, required: true },
   },

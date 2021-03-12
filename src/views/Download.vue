@@ -33,14 +33,13 @@
 </template>
 
 <script>
-import AppButton from '@/components/AppButton';
 import axios from 'axios';
 import filesize from 'filesize';
 import { mapActions } from 'vuex';
 
 export default {
   name: 'download',
-  components: { AppButton },
+  components: {},
   props: {
     uuid: { type: String, required: true },
     token: { type: String, required: true },
