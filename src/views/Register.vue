@@ -86,7 +86,7 @@
           </label>
           <input
             v-model="form.password_confirmation"
-            type="password_confirmation"
+            type="password"
             id="password_confirmation"
             class="w-full border-2 border-gray-200 h-10 px-3 rounded-md"
             :class="{ 'border-red-500': errors && errors.password_confirmation }"
