@@ -40,7 +40,7 @@ import axios from 'axios';
 import { mapActions } from 'vuex';
 import ErrorMessage from '@/components/ErrorMessage';
 
-const stripe = Stripe(process.env.VUE_APP_STRIPE_KEY);
+const stripe = window.Stripe(process.env.VUE_APP_STRIPE_KEY);
 const elements = stripe.elements();
 const cardElement = elements.create('card');
 
@@ -96,7 +96,7 @@ export default {
     },
     async createSubscription (token) {
       const self = this;
-      let response = await axios.post('api/subscriptions', { plan: self.plan, token });
+      await axios.post('api/subscriptions', { plan: self.plan, token });
       await self.me();
       self.submitting = false;
       // await self.$swal({

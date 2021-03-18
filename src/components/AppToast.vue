@@ -1,4 +1,5 @@
 <template>
+  <div></div>
 </template>
 
 <script>
@@ -14,7 +15,7 @@ export default {
   watch: {
     toast: {
       deep: true,
-      handler(newVal, oldVal) {
+      handler(newVal) {
         if (newVal.message) {
           this.popToast();
         }

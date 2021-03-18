@@ -18,25 +18,25 @@ export default {
   },
   mutations: {
     SET_TOAST (state, data) {
-      if (data.hasOwnProperty('message')) {
+      if (Object.prototype.hasOwnProperty.call(data, "message")) {
         state.toast.message = data.message;
       }
-      if (data.hasOwnProperty('position')) {
+      if (Object.prototype.hasOwnProperty.call(data, "position")) {
         state.toast.position = data.position;
       }
-      if (data.hasOwnProperty('icon')) {
+      if (Object.prototype.hasOwnProperty.call(data, "icon")) {
         state.toast.icon = data.icon;
       }
-      if (data.hasOwnProperty('showConfirmButton')) {
+      if (Object.prototype.hasOwnProperty.call(data, "showConfirmButton")) {
         state.toast.showConfirmButton = data.showConfirmButton;
       }
-      if (data.hasOwnProperty('timer')) {
+      if (Object.prototype.hasOwnProperty.call(data, "timer")) {
         state.toast.timer = data.timer;
       }
-      if (data.hasOwnProperty('timerProgressBar')) {
+      if (Object.prototype.hasOwnProperty.call(data, "timerProgressBar")) {
         state.toast.timerProgressBar = data.timerProgressBar;
       }
-      if (data.hasOwnProperty('showCloseButton')) {
+      if (Object.prototype.hasOwnProperty.call(data, "showCloseButton")) {
         state.toast.showCloseButton = data.showCloseButton;
       }
     },

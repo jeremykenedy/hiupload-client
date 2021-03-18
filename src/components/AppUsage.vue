@@ -36,7 +36,7 @@ export default {
     },
   },
   mounted () {
-    this.getUsage().then((response) => {
+    this.getUsage().then(() => {
       this.loading = false;
     });
   },
